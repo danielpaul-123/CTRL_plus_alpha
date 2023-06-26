@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CTRL+</string>
+    <string name="button">Button</string>
+    <string name="screen_share">screen share</string>
+    <string name="mouse_move">mouse_move</string>
+    <string name="activity_menu">CTRL+ Menu</string>
+    <string name="activity_main">CTRL+ Connect</string>
+    <string name="activity_scnshare">CTRL+ Screen Share</string>
+    <string name="activity_shortcuts">CTRL+ Shortcuts</string>
+    <string name="ctrl_mouse_controls">CTRL+ Mouse Controls</string>
+    <string name="activity_presentation">CTRL+ Presentation Controls</string>
+</resources>

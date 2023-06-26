@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_menu">CTRL+ Menu</string>
+    <string name="activity_main">CTRL+ Connect</string>
+    <string name="activity_presentation">CTRL+ Presentation Controls</string>
+</resources>
