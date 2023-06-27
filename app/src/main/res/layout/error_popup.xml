@@ -10,7 +10,7 @@
         android:id="@+id/dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -30,9 +30,10 @@
 
         <Button
             android:id="@+id/dialog_yes_button"
-            android:background="@drawable/round_button"
+            android:backgroundTint="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:layout_weight="1"
             android:text="Yes" />
 

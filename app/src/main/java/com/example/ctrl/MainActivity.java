@@ -124,47 +124,72 @@ public class MainActivity extends AppCompatActivity {
     }
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result -> {
         String pattern = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):([1-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
-       if(result.getContents().matches(pattern) ) {
-           String[] parts = result.getContents().split(":");
-           String ipAddress = parts[0];
-           int port = Integer.parseInt(parts[1]);
 
-           //save ip address and port in shared preferences
-           SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-           SharedPreferences.Editor editor = preferences.edit();
-           editor.putString("ipAddress", ipAddress);
-           editor.putInt("port", port);
-           editor.apply();
-
-           //menu Intent
-           Intent i = new Intent(MainActivity.this, Menu.class);
-           startActivity(i);
-       }
-       else{
-
-           LayoutInflater inflater = getLayoutInflater();
+        if (result.getContents()==null) {
+            LayoutInflater inflater = getLayoutInflater();
 
             // Inflate the custom layout for the dialog
-           View dialogView = inflater.inflate(R.layout.error_popup, null);
+            View dialogView = inflater.inflate(R.layout.error_popup, null);
 
-           AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-           builder.setView(dialogView);
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setView(dialogView);
 
             // Get references to the views in the custom layout
-           TextView titleTextView = dialogView.findViewById(R.id.dialog_title);
-           TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
-           Button yesButton = dialogView.findViewById(R.id.dialog_yes_button);
+            TextView titleTextView = dialogView.findViewById(R.id.dialog_title);
+            TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+            Button yesButton = dialogView.findViewById(R.id.dialog_yes_button);
 
             // Set the text for the title and message
-           titleTextView.setText("Error");
-           messageTextView.setText("It looks like you are trying to scan other qr codes");
-           // Create and show the dialog
-           AlertDialog dialog = builder.create();
-           dialog.show();
+            titleTextView.setText("Error");
+            messageTextView.setText("Please scan a valid QR code to establish conection.");
+            // Create and show the dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
             // Set the listener for the button
-           yesButton.setText("OK");
-           yesButton.setOnClickListener(v -> dialog.dismiss());
-           }
+            yesButton.setText("OK");
+            yesButton.setOnClickListener(v -> dialog.dismiss());
+        }
+        else if(result.getContents().matches(pattern) ) {
+            String[] parts = result.getContents().split(":");
+            String ipAddress = parts[0];
+            int port = Integer.parseInt(parts[1]);
+
+            //save ip address and port in shared preferences
+            SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("ipAddress", ipAddress);
+            editor.putInt("port", port);
+            editor.apply();
+
+            //menu Intent
+            Intent i = new Intent(MainActivity.this, Menu.class);
+            startActivity(i);
+        }
+        else{
+
+            LayoutInflater inflater = getLayoutInflater();
+
+            // Inflate the custom layout for the dialog
+            View dialogView = inflater.inflate(R.layout.error_popup, null);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setView(dialogView);
+
+            // Get references to the views in the custom layout
+            TextView titleTextView = dialogView.findViewById(R.id.dialog_title);
+            TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+            Button yesButton = dialogView.findViewById(R.id.dialog_yes_button);
+
+            // Set the text for the title and message
+            titleTextView.setText("Error");
+            messageTextView.setText("Please scan a valid QR code to establish conection.");
+            // Create and show the dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            // Set the listener for the button
+            yesButton.setText("OK");
+            yesButton.setOnClickListener(v -> dialog.dismiss());
+        }
 
     });
 }
