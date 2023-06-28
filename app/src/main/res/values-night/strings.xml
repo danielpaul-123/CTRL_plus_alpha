@@ -3,4 +3,8 @@
     <string name="activity_menu">CTRL+ Menu</string>
     <string name="activity_main">CTRL+ Connect</string>
     <string name="activity_presentation">CTRL+ Presentation Controls</string>
+    <string name="scrbtn_use">Take a screenshot in Server Device</string>
+    <string name="newtabbtn_use">Open new Browser tab in Server Device</string>
+    <string name="viewprjbtn_use">View Project in Github</string>
+    <string name="trmcntbtn_use">Terminate Connection</string>
 </resources>
