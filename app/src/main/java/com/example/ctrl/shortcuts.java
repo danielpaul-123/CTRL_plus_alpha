@@ -3,13 +3,14 @@ package com.example.ctrl;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class shortcuts extends AppCompatActivity {
-    Button shut_down,restart,sleep,lock;
+    ImageButton shut_down,restart,sleep,lock;
     SharedPreferences preferences;
     String ipAddress;
     int port;
@@ -29,12 +30,14 @@ public class shortcuts extends AppCompatActivity {
         ipAddress = preferences.getString("ipAddress", "");
         port =  preferences.getInt("port", 0);
 
-        shut_down.setOnClickListener(v -> {
-            SignalSender.SendShortcuts(ipAddress, port, 404);
-
-        });
+        shut_down.setOnClickListener(v -> SignalSender.SendShortcuts(ipAddress, port, 404));
         restart.setOnClickListener(v -> SignalSender.SendShortcuts(ipAddress,port,201));
         sleep.setOnClickListener(v -> SignalSender.SendShortcuts(ipAddress,port,240));
-        lock.setOnClickListener(v -> SignalSender.SendShortcuts(ipAddress,port,360));
+        lock.setOnClickListener(v -> {
+            SignalSender.SendShortcuts(ipAddress, port, 360);
+            super.finish();
+            Toast.makeText(getApplicationContext(),"Connection Terminated. Go back to Main Window to Reconnect",Toast.LENGTH_LONG).show();
+            shortcuts.this.finish();
+        });
     }
 }

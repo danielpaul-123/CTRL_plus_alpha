@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +18,7 @@ public class Menu extends AppCompatActivity {
     String ipAddress;
     int port;
     ImageButton img,img1,img2,img3;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,7 @@ public class Menu extends AppCompatActivity {
 
         // Set the text for the title and message
         titleTextView.setText("CTRL+");
-        messageTextView.setText("Are you sure you want to leave the menu? This will reset the connection.");
+        messageTextView.setText("Are you sure you want to leave the menu? This will terminate the connection.");
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
