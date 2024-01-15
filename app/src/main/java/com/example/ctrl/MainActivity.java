@@ -177,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
             Button yesButton = dialogView.findViewById(R.id.dialog_yes_button);
 
             // Set the text for the title and message
-            titleTextView.setText("Error");
-            messageTextView.setText("Please scan a valid QR code to establish conection.");
+            titleTextView.setText(R.string.error);
+            messageTextView.setText(R.string.please_scan_a_valid_qr_code_to_establish_conection);
             // Create and show the dialog
             AlertDialog dialog = builder.create();
             dialog.show();
             // Set the listener for the button
-            yesButton.setText("OK");
+            yesButton.setText(R.string.ok);
             yesButton.setOnClickListener(v -> dialog.dismiss());
         }
 

@@ -37,17 +37,9 @@ public class MouseUI extends AppCompatActivity {
         ipAddress = preferences.getString("ipAddress", "");
         port =  preferences.getInt("port", 0);
 
-        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            public boolean onTwoFingerTap(MotionEvent e) {
-                // Handle two-finger tap
-                SignalSender.sendMouseData(ipAddress,port,0,0,false,true);
-                return true;
-            }
-        });
         // Set an OnTouchListener on the textView to handle finger movements
         textView.setOnTouchListener((view, event) -> {
             int action = event.getActionMasked(); // Get the action of the event
-            gestureDetector.onTouchEvent(event);
             switch (action) {
                 case MotionEvent.ACTION_DOWN: // Finger touched the screen
                     isDragging = true; // Start dragging
