@@ -24,6 +24,10 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 public class MainActivity extends AppCompatActivity {
     ImageButton btn;
+    String ip_address;
+    int pt;
+    EditText ipfield,portfield;
+    Button connectbutton;
     FloatingActionButton fab_main,fab_one,fab_two;
     Float translationYaxis = 100f;
     boolean menuOpen = false;
@@ -33,44 +37,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn = findViewById(R.id.connect);
+        ipfield = findViewById(R.id.ipfld);
+        portfield = findViewById(R.id.portfld);
+        connectbutton = findViewById(R.id.connectbtn);
         Toolbar toolbar = findViewById(R.id.toolbar1);
         toolbar.setTitle(R.string.activity_main);
         ShowMenu();
         btn.setOnClickListener(v -> scanCode());
-        btn.setOnLongClickListener(v -> {
+        connectbutton.setOnClickListener(v -> {
+            try{
+                ip_address = ipfield.getText().toString().trim();
+                pt = Integer.parseInt(portfield.getText().toString());
+            }catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(),"Enter IP Address and Port Address",Toast.LENGTH_LONG).show();
+                ipfield.setError("Fields cannot be Empty");
+                portfield.setError("Fields cannot be Empty");
+            }
+            if(pt == 0 || ip_address.isEmpty()){
+                ipfield.setError("Fields cannot be Empty");
+                portfield.setError("Fields cannot be Empty");
+            }else{
+                SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("ipAddress", ip_address);
+                editor.putInt("port", pt);
+                editor.apply();
 
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.manual,null);
-
-            EditText ip = dialogView.findViewById(R.id.ip_edit_text);
-            EditText prt = dialogView.findViewById(R.id.port_edit_text);
-            Button set = dialogView.findViewById(R.id.set);
-            Button cancel = dialogView.findViewById(R.id.cancel);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setView(dialogView);
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            set.setOnClickListener(v1 -> {
-                String ip_address = ip.getText().toString().trim();
-                int pt = Integer.parseInt(prt.getText().toString());
-                if(pt == 0){
-                    ip.setError("fields Cannot be Empty");
-                }else{
-                    SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("ipAddress", ip_address);
-                    editor.putInt("port", pt);
-                    editor.apply();
-
-                    Intent i = new Intent(MainActivity.this, Menu.class);
-                    startActivity(i);
-                }
-            });
-            cancel.setOnClickListener(v12 -> dialog.cancel());
-            return true;
+                Intent i = new Intent(MainActivity.this, Menu.class);
+                startActivity(i);
+            }
         });
     }
 
@@ -140,13 +136,13 @@ public class MainActivity extends AppCompatActivity {
             Button yesButton = dialogView.findViewById(R.id.dialog_yes_button);
 
             // Set the text for the title and message
-            titleTextView.setText("Error");
-            messageTextView.setText("Please scan a valid QR code to establish conection.");
+            titleTextView.setText(R.string.error);
+            messageTextView.setText(R.string.please_scan_a_valid_qr_code_to_establish_conection);
             // Create and show the dialog
             AlertDialog dialog = builder.create();
             dialog.show();
             // Set the listener for the button
-            yesButton.setText("OK");
+            yesButton.setText(R.string.ok);
             yesButton.setOnClickListener(v -> dialog.dismiss());
         }
         else if(result.getContents().matches(pattern) ) {

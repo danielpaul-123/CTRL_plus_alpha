@@ -2,7 +2,7 @@
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FF111423"
+    android:background="#00111423"
     android:elevation="10dp">
 
 </androidx.appcompat.widget.Toolbar>

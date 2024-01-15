@@ -7,4 +7,12 @@
     <string name="newtabbtn_use">Open new Browser tab in Server Device</string>
     <string name="viewprjbtn_use">View Project in Github</string>
     <string name="trmcntbtn_use">Terminate Connection</string>
+    <string name="view_for_screen_sharing">view for screen sharing</string>
+    <string name="ip_address">IP Address</string>
+    <string name="port">Port</string>
+    <string name="or">--------- OR ---------</string>
+    <string name="connect">Connect</string>
+    <string name="error">Error</string>
+    <string name="please_scan_a_valid_qr_code_to_establish_conection">Please scan a valid QR code to establish conection.</string>
+    <string name="ok">OK</string>
 </resources>
