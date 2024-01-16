@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,21 +14,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.Locale;
-
 public class Presentation extends AppCompatActivity {
     private long mTimeStartInMillis;
-
     private TextView mTextViewCountDown;
-    private ImageButton mButtonReset;
-
-    private CountDownTimer mCountDownTimer;
-    private boolean mTimerRunning;
-    private long mTimeLeftInMillis;
-
+    private CountDownTimer countDownTimer;
     Button start;
-    Button left;
-    Button right;
+    ImageButton left;
+    ImageButton right;
     SharedPreferences preferences;
     String ipAddress;
     int port;
@@ -48,7 +39,7 @@ public class Presentation extends AppCompatActivity {
         port =  preferences.getInt("port", 0);
 
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
-        mButtonReset = findViewById(R.id.button_reset);
+        ImageButton mButtonReset = findViewById(R.id.button_reset);
 
         mTextViewCountDown.setOnClickListener(v -> {
             // Inflate the dialog layout
@@ -67,16 +58,12 @@ public class Presentation extends AppCompatActivity {
             // Add "OK" button to the dialog
             button_set.setOnClickListener(v12 -> {
                 // Get the time entered by the user
-                String timeString = timeEditText.getText().toString().trim();
-                if(timeString == null){
+                int timeString = Integer.parseInt(timeEditText.getText().toString().trim());
+                if(timeString == 0){
                     timeEditText.setError("Cannot be Empty");
                 }else {
-                    int timeInSeconds = Integer.parseInt(timeString) * 60;
-
                     // Set the timer duration
-                    mTimeStartInMillis = timeInSeconds * 1000L;
-                    resetTimer();
-
+                    mTimeStartInMillis = timeString * 60000L;
                     dialog.cancel();
                 }
             });
@@ -88,54 +75,58 @@ public class Presentation extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar3);
         toolbar.setTitle(R.string.activity_presentation);
 
-        mButtonReset.setOnClickListener(v -> resetTimer());
-        updateCountDownText();
+        mButtonReset.setOnClickListener(v -> {
+            countDownTimer.cancel();
+            resetTimer();
+        });
 
-        start.setOnClickListener(v -> SignalSender.sendKeycode(ipAddress, port,116));
+        start.setOnClickListener(v -> {
+            if (countDownTimer == null)
+            {
+                startCountdownTimer(mTimeStartInMillis);
+                SignalSender.sendKeycode(ipAddress, port, 116);
+                start.setText("STOP");
+            }
+            else
+            {
+                resetTimer();
+                SignalSender.sendKeycode(ipAddress, port, 27);
+                countDownTimer.cancel();
+                countDownTimer = null;
+                start.setText("START");
+            }
+        });
 
         left.setOnClickListener(v -> SignalSender.sendKeycode(ipAddress, port,37));
 
         right.setOnClickListener(v -> SignalSender.sendKeycode(ipAddress, port,39));
     }
-    @SuppressLint("SetTextI18n")
-    private void startTimer(){
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis,1000) {
+    private void startCountdownTimer(long milliseconds) {
+        // Update the TextView with the remaining time
+        // Handle the countdown completion
+        countDownTimer = new CountDownTimer(milliseconds, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                mTimeLeftInMillis = millisUntilFinished;
-                updateCountDownText();
+                // Update the TextView with the remaining time
+                long seconds = (millisUntilFinished / 1000)%60;
+                long minutes = millisUntilFinished / 60000;
+
+                String timeLeft = minutes + ":" + seconds;
+
+                mTextViewCountDown.setText(timeLeft);
             }
 
             @Override
             public void onFinish() {
-                mTimerRunning = false;
-                mButtonReset.setVisibility(View.VISIBLE);
+                // Handle the countdown completion
+                mTextViewCountDown.setText("00:00");
             }
-        }.start();
-        mTimerRunning = true;
-        start.setText("exit");
-        mButtonReset.setVisibility(View.INVISIBLE);
+        };
+        countDownTimer.start();
     }
-    @SuppressLint("SetTextI18n")
-    private void pauseTimer(){
-        mCountDownTimer.cancel();
-        mTimerRunning = false;
-        start.setText("start");
-        mButtonReset.setVisibility(View.VISIBLE);
+    private  void resetTimer()
+    {
+        mTextViewCountDown.setText("00:00");
     }
-    private void resetTimer(){
 
-        mTimeLeftInMillis = mTimeStartInMillis;
-        Log.d("Presentation", "Time entered by user: " + mTimeLeftInMillis);
-
-        updateCountDownText();
-        mButtonReset.setVisibility(View.INVISIBLE);
-    }
-    private void updateCountDownText(){
-        int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
-        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
-
-        String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
-        mTextViewCountDown.setText(timeLeftFormatted);
-    }
 }
