@@ -24,6 +24,7 @@ public class Presentation extends AppCompatActivity {
     SharedPreferences preferences;
     String ipAddress;
     int port;
+    int timeString = 0;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -58,7 +59,7 @@ public class Presentation extends AppCompatActivity {
             // Add "OK" button to the dialog
             button_set.setOnClickListener(v12 -> {
                 // Get the time entered by the user
-                int timeString = Integer.parseInt(timeEditText.getText().toString().trim());
+                timeString = Integer.parseInt(timeEditText.getText().toString().trim());
                 if(timeString == 0){
                     timeEditText.setError("Cannot be Empty");
                 }else {
@@ -83,17 +84,23 @@ public class Presentation extends AppCompatActivity {
         start.setOnClickListener(v -> {
             if (countDownTimer == null)
             {
-                startCountdownTimer(mTimeStartInMillis);
+                if (timeString !=0)
+                {
+                    startCountdownTimer(mTimeStartInMillis);
+                }
                 SignalSender.sendKeycode(ipAddress, port, 116);
-                start.setText("STOP");
+                start.setText(R.string.stop);
             }
             else
             {
-                resetTimer();
+                if (countDownTimer != null)
+                {
+                    countDownTimer.cancel();
+                    countDownTimer = null;
+                    resetTimer();
+                }
                 SignalSender.sendKeycode(ipAddress, port, 27);
-                countDownTimer.cancel();
-                countDownTimer = null;
-                start.setText("START");
+                start.setText(R.string.start);
             }
         });
 
@@ -119,14 +126,14 @@ public class Presentation extends AppCompatActivity {
             @Override
             public void onFinish() {
                 // Handle the countdown completion
-                mTextViewCountDown.setText("00:00");
+                mTextViewCountDown.setText(R.string._00_00);
             }
         };
         countDownTimer.start();
     }
     private  void resetTimer()
     {
-        mTextViewCountDown.setText("00:00");
+        mTextViewCountDown.setText(R.string._00_00);
     }
 
 }

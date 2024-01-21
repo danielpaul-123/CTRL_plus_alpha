@@ -26,4 +26,9 @@
     <string name="b1">b1</string>
     <string name="start">START</string>
     <string name="b4">b4</string>
+    <string name="stop">STOP</string>
+    <string name="shortcuts">shortcuts</string>
+    <string name="ip_address_">IP Address:</string>
+    <string name="presentation">presentation</string>
+    <string name="port_address">Port Address:</string>
 </resources>
